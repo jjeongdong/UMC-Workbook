@@ -1,6 +1,7 @@
 package com.example.umc.service.StoreService;
 
 import com.example.umc.apiPayload.code.status.ErrorStatus;
+import com.example.umc.apiPayload.exception.handler.MissionHandler;
 import com.example.umc.apiPayload.exception.handler.TempHandler;
 import com.example.umc.converter.StoreConverter;
 import com.example.umc.domain.Member;
@@ -57,7 +58,7 @@ public class StoreCommandServiceImpl implements StoreCommandService{
         Mission mission = missionRepository.findById(missionId).get();
 
         if (memberMissionRepository.existsByMemberAndMission(member, mission)) {
-            throw new TempHandler(ErrorStatus.MISSION_ALREADY_IN_PROGRESS);
+            throw new MissionHandler(ErrorStatus.MISSION_ALREADY_IN_PROGRESS);
         }
 
         MemberMission memberMission = MemberMission.builder()
