@@ -1,8 +1,10 @@
 package com.example.umc.service.StoreService;
 
 import com.example.umc.converter.StoreConverter;
+import com.example.umc.domain.Mission;
 import com.example.umc.domain.Review;
 import com.example.umc.repository.MemberRepository;
+import com.example.umc.repository.MissionRepository;
 import com.example.umc.repository.ReviewRepository;
 import com.example.umc.repository.StoreRepository;
 import com.example.umc.web.dto.StoreRequestDTO;
@@ -21,6 +23,8 @@ public class StoreCommandServiceImpl implements StoreCommandService{
 
     private final StoreRepository storeRepository;
 
+    private final MissionRepository missionRepository;
+
     @Override
     public Review createReview(Long memberId, Long storeId, StoreRequestDTO.ReviewRequestDTO request) {
 
@@ -30,5 +34,15 @@ public class StoreCommandServiceImpl implements StoreCommandService{
         review.setStore(storeRepository.findById(storeId).get());
 
         return reviewRepository.save(review);
+    }
+
+    @Override
+    public Mission createMission(Long storeId, StoreRequestDTO.MissionRequestDTO request) {
+
+        Mission mission = StoreConverter.toMission(request);
+
+        mission.setStore(storeRepository.findById(storeId).get());
+
+        return missionRepository.save(mission);
     }
 }
