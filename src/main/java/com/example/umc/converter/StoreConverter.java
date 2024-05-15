@@ -3,6 +3,7 @@ package com.example.umc.converter;
 import com.example.umc.domain.Member;
 import com.example.umc.domain.Mission;
 import com.example.umc.domain.Review;
+import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.web.dto.MemberResponseDTO;
 import com.example.umc.web.dto.StoreRequestDTO;
 import com.example.umc.web.dto.StoreResponseDTO;
@@ -43,4 +44,10 @@ public class StoreConverter {
                 .build();
     }
 
+    public static StoreResponseDTO.MemberMissionResponseDTO toMemberMissionResponseDTO(MemberMission memberMission){
+        return StoreResponseDTO.MemberMissionResponseDTO.builder()
+                .memberMissionId(memberMission.getId())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
 }
