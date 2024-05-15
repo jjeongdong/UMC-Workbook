@@ -4,10 +4,12 @@ import com.example.umc.apiPayload.ApiResponse;
 import com.example.umc.converter.StoreConverter;
 import com.example.umc.domain.Mission;
 import com.example.umc.domain.Review;
+import com.example.umc.domain.Store;
 import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.service.StoreService.StoreCommandService;
 import com.example.umc.validation.annotation.ExistMember;
 import com.example.umc.validation.annotation.ExistMission;
+import com.example.umc.validation.annotation.ExistRegion;
 import com.example.umc.validation.annotation.ExistStore;
 import com.example.umc.web.dto.StoreRequestDTO;
 import com.example.umc.web.dto.StoreResponseDTO;
@@ -23,6 +25,13 @@ import org.springframework.web.bind.annotation.*;
 public class StoreRestController {
 
     private final StoreCommandService storeCommandService;
+
+    @PostMapping("/{regionId}")
+    public ApiResponse<StoreResponseDTO.StoreCreateResponseDTO> createStore(@RequestBody @Valid StoreRequestDTO.StoreCreateRequestDTO request,
+                                                                            @ExistRegion @PathVariable(name = "regionId") Long regionId) {
+        Store store = storeCommandService.createStore(regionId, request);
+        return ApiResponse.onSuccess(StoreConverter.toStoreCreateResponseDTO(store));
+    }
 
     @PostMapping("/{storeId}/reviews")
     public ApiResponse<StoreResponseDTO.ReviewResponseDTO> createReview(@RequestBody @Valid StoreRequestDTO.ReviewRequestDTO request,

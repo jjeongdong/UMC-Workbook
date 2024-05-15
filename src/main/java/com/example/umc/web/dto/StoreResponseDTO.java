@@ -13,6 +13,16 @@ public class StoreResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class StoreCreateResponseDTO{
+        Long storeId;
+        LocalDateTime createdAt;
+    }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ReviewResponseDTO{
         Long reviewId;
         LocalDateTime createdAt;
