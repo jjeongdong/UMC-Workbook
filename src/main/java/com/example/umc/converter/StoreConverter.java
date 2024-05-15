@@ -3,6 +3,7 @@ package com.example.umc.converter;
 import com.example.umc.domain.Member;
 import com.example.umc.domain.Mission;
 import com.example.umc.domain.Review;
+import com.example.umc.domain.Store;
 import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.web.dto.MemberResponseDTO;
 import com.example.umc.web.dto.StoreRequestDTO;
@@ -13,6 +14,22 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class StoreConverter {
+
+    public static StoreResponseDTO.StoreCreateResponseDTO toStoreCreateResponseDTO(Store store){
+        return StoreResponseDTO.StoreCreateResponseDTO.builder()
+                .storeId(store.getId())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static Store toStore(StoreRequestDTO.StoreCreateRequestDTO request){
+        return Store.builder()
+                .name(request.getName())
+                .address(request.getAddress())
+                .rating(request.getRating())
+                .category(request.getCategory())
+                .build();
+    }
 
     public static StoreResponseDTO.ReviewResponseDTO toReviewResponseDTO(Review review){
         return StoreResponseDTO.ReviewResponseDTO.builder()

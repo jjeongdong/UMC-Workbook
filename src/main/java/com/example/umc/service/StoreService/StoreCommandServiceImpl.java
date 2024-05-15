@@ -7,6 +7,7 @@ import com.example.umc.converter.StoreConverter;
 import com.example.umc.domain.Member;
 import com.example.umc.domain.Mission;
 import com.example.umc.domain.Review;
+import com.example.umc.domain.Store;
 import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.repository.*;
 import com.example.umc.web.dto.StoreRequestDTO;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class StoreCommandServiceImpl implements StoreCommandService{
+public class StoreCommandServiceImpl implements StoreCommandService {
 
     private final ReviewRepository reviewRepository;
 
@@ -29,6 +30,18 @@ public class StoreCommandServiceImpl implements StoreCommandService{
 
     private final MemberMissionRepository memberMissionRepository;
 
+    private final RegionRepository regionRepository;
+
+
+    @Override
+    public Store createStore(Long regionId, StoreRequestDTO.StoreCreateRequestDTO request) {
+
+        Store store = StoreConverter.toStore(request);
+
+        store.setRegion(regionRepository.findById(regionId).get());
+
+        return storeRepository.save(store);
+    }
 
     @Override
     public Review createReview(Long memberId, Long storeId, StoreRequestDTO.ReviewRequestDTO request) {

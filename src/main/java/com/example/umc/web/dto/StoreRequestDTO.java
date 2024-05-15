@@ -1,12 +1,28 @@
 package com.example.umc.web.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 
 public class StoreRequestDTO {
+
+    @Getter
+    public static class StoreCreateRequestDTO{
+
+        @NotNull
+        private String name;
+
+        @NotNull
+        private String address;
+
+        @NotNull
+        private Float rating;
+
+        @NotNull
+        private String category;
+
+    }
 
     @Getter
     public static class ReviewRequestDTO{
