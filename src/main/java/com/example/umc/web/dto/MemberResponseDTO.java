@@ -43,4 +43,28 @@ public class MemberResponseDTO {
         String content;
         LocalDate createdAt;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChallengingMissionPreViewListDTO {
+        List<MemberResponseDTO.ChallengingMissionPreViewDTO> challengingMissionList;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChallengingMissionPreViewDTO {
+        String storeName;
+        Integer reward;
+        Integer criteria;
+        LocalDate expirationDate;
+    }
 }

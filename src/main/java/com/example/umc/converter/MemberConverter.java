@@ -3,6 +3,7 @@ package com.example.umc.converter;
 import com.example.umc.domain.Member;
 import com.example.umc.domain.Review;
 import com.example.umc.domain.enums.Gender;
+import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.web.dto.MemberRequestDTO;
 import com.example.umc.web.dto.MemberResponseDTO;
 import com.example.umc.web.dto.StoreResponseDTO;
@@ -68,6 +69,30 @@ public class MemberConverter {
                 .totalElements(reviewList.getTotalElements())
                 .listSize(reviewPreViewDTOList.size())
                 .reviewList(reviewPreViewDTOList)
+                .build();
+    }
+
+    public static MemberResponseDTO.ChallengingMissionPreViewDTO toChallengingMissionPreViewDTO(MemberMission memberMission) {
+        return MemberResponseDTO.ChallengingMissionPreViewDTO.builder()
+                .reward(memberMission.getMission().getReward())
+                .criteria(memberMission.getMission().getCriteria())
+                .expirationDate(memberMission.getMission().getExpirationDate())
+                .storeName(memberMission.getMission().getStore().getName())
+                .build();
+    }
+
+    public static MemberResponseDTO.ChallengingMissionPreViewListDTO toChallengingMissionPreViewListDTO(Page<MemberMission> challengingMissionList) {
+
+        List<MemberResponseDTO.ChallengingMissionPreViewDTO> reviewPreViewDTOList = challengingMissionList.stream()
+                .map(MemberConverter::toChallengingMissionPreViewDTO).collect(Collectors.toList());
+
+        return MemberResponseDTO.ChallengingMissionPreViewListDTO.builder()
+                .isLast(challengingMissionList.isLast())
+                .isFirst(challengingMissionList.isFirst())
+                .totalPage(challengingMissionList.getTotalPages())
+                .totalElements(challengingMissionList.getTotalElements())
+                .listSize(reviewPreViewDTOList.size())
+                .challengingMissionList(reviewPreViewDTOList)
                 .build();
     }
 }
