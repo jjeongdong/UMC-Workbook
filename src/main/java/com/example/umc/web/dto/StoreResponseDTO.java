@@ -15,7 +15,7 @@ public class StoreResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class StoreCreateResponseDTO{
+    public static class StoreCreateResponseDTO {
         Long storeId;
         LocalDateTime createdAt;
     }
@@ -25,7 +25,7 @@ public class StoreResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewResponseDTO{
+    public static class ReviewResponseDTO {
         Long reviewId;
         LocalDateTime createdAt;
     }
@@ -34,7 +34,7 @@ public class StoreResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MissionResponseDTO{
+    public static class MissionResponseDTO {
         Long missionId;
         LocalDateTime createdAt;
     }
@@ -43,7 +43,7 @@ public class StoreResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MemberMissionResponseDTO{
+    public static class MemberMissionResponseDTO {
         Long memberMissionId;
         LocalDateTime createdAt;
     }
@@ -52,7 +52,7 @@ public class StoreResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewPreViewListDTO{
+    public static class ReviewPreViewListDTO {
         List<ReviewPreViewDTO> reviewList;
         Integer listSize;
         Integer totalPage;
@@ -65,10 +65,33 @@ public class StoreResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewPreViewDTO{
+    public static class ReviewPreViewDTO {
         String ownerNickname;
         Float rating;
         String content;
         LocalDate createdAt;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MissionPreViewListDTO {
+        List<MissionPreViewDTO> missionList;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MissionPreViewDTO {
+        Integer reward;
+        Integer criteria;
+        LocalDate expirationDate;
     }
 }
