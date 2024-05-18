@@ -48,7 +48,7 @@ public class MemberRestController {
             @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다.")
     })
     public ApiResponse<MemberResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistStore @PathVariable(name = "memberId") Long memberId,
-                                                                            @RequestParam(name = "page", defaultValue = "0") int page){
+                                                                            @RequestParam(name = "page", defaultValue = "0") Integer page){
 
         Page<Review> reviewList = memberQueryService.getReviewList(memberId, page);
         System.out.println("reviewList = " + reviewList);

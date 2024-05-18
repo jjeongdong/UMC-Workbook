@@ -27,7 +27,7 @@ public class MemberQueryServiceImpl implements MemberQueryService{
     }
 
     @Override
-    public Page<Review> getReviewList(Long memberId, int page) {
+    public Page<Review> getReviewList(Long memberId, Integer page) {
         Member member = memberRepository.findById(memberId).get();
         return reviewRepository.findAllByMember(member, PageRequest.of(page, 10));
     }
