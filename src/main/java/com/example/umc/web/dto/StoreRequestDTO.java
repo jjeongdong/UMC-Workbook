@@ -1,6 +1,5 @@
 package com.example.umc.web.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 
@@ -11,16 +10,16 @@ public class StoreRequestDTO {
     public static class StoreCreateRequestDTO{
 
         @NotNull
-        private String name;
+        String name;
 
         @NotNull
-        private String address;
+        String address;
 
         @NotNull
-        private Float rating;
+        Float rating;
 
         @NotNull
-        private String category;
+        String category;
 
     }
 
