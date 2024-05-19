@@ -8,6 +8,7 @@ import com.example.umc.domain.Review;
 import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.service.MemberService.MemberCommandService;
 import com.example.umc.service.MemberService.MemberQueryService;
+import com.example.umc.validation.annotation.ExistMember;
 import com.example.umc.validation.annotation.ExistStore;
 import com.example.umc.web.dto.MemberRequestDTO;
 import com.example.umc.web.dto.MemberResponseDTO;
@@ -49,11 +50,10 @@ public class MemberRestController {
             @Parameter(name = "memberId", description = "멤버의 아이디, path variable 입니다!"),
             @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다.")
     })
-    public ApiResponse<MemberResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistStore @PathVariable(name = "memberId") Long memberId,
+    public ApiResponse<MemberResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistMember @PathVariable(name = "memberId") Long memberId,
                                                                              @RequestParam(name = "page", defaultValue = "0") Integer page){
 
         Page<Review> reviewList = memberQueryService.getReviewList(memberId, page);
-        System.out.println("reviewList = " + reviewList);
         return ApiResponse.onSuccess(MemberConverter.toReviewPreViewListDTO(reviewList));
     }
 
@@ -69,8 +69,8 @@ public class MemberRestController {
             @Parameter(name = "memberId", description = "멤버의 아이디, path variable 입니다!"),
             @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다.")
     })
-    public ApiResponse<MemberResponseDTO.ChallengingMissionPreViewListDTO> getChallengingMissionList(@ExistStore @PathVariable(name = "memberId") Long memberId,
-                                                                                                @RequestParam(name = "page", defaultValue = "0") Integer page){
+    public ApiResponse<MemberResponseDTO.ChallengingMissionPreViewListDTO> getChallengingMissionList(@ExistMember @PathVariable(name = "memberId") Long memberId,
+                                                                                                     @RequestParam(name = "page", defaultValue = "0") Integer page){
 
         Page<MemberMission> challengingMissionList = memberQueryService.getChallengingMissionList(memberId, page);
         return ApiResponse.onSuccess(MemberConverter.toChallengingMissionPreViewListDTO(challengingMissionList));

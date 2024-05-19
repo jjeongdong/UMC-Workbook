@@ -42,6 +42,6 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     @Override
     public Page<MemberMission> getChallengingMissionList(Long memberId, Integer page) {
         Member member = memberRepository.findById(memberId).get();
-        return memberMissionRepository.findAllByMemberAndStatus(member, MissionStatus.CHALLENGING, PageRequest.of(page, 10));
+        return memberMissionRepository.findByMemberAndStatus(member, MissionStatus.CHALLENGING, PageRequest.of(page, 10));
     }
 }
