@@ -8,17 +8,12 @@ spring:
     init:
       mode: never
   jpa:
-    show_sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
         format_sql: true
         use_sql_comments: true
-        highlight_sql: true
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
-
-logging:
-  level:
-    org.hibernate.type.descriptor.sql: trace # 파라미터 값 출력
