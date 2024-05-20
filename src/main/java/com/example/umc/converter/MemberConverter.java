@@ -6,7 +6,6 @@ import com.example.umc.domain.enums.Gender;
 import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.web.dto.MemberRequestDTO;
 import com.example.umc.web.dto.MemberResponseDTO;
-import com.example.umc.web.dto.StoreResponseDTO;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;

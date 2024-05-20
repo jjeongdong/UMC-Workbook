@@ -1,10 +1,7 @@
 package com.example.umc.service.RegionService;
 
-import com.example.umc.domain.Mission;
 import com.example.umc.domain.Region;
-import com.example.umc.repository.MissionRepository;
 import com.example.umc.repository.RegionRepository;
-import com.example.umc.service.MissionService.MissionQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

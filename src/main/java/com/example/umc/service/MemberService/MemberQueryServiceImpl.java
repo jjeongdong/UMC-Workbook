@@ -1,13 +1,11 @@
 package com.example.umc.service.MemberService;
 
 import com.example.umc.domain.Member;
-import com.example.umc.domain.Mission;
 import com.example.umc.domain.Review;
 import com.example.umc.domain.enums.MissionStatus;
 import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.repository.MemberMissionRepository;
 import com.example.umc.repository.MemberRepository;
-import com.example.umc.repository.MissionRepository;
 import com.example.umc.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

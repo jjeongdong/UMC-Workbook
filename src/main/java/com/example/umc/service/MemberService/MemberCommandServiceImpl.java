@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class MemberCommandServiceImpl implements MemberCommandService{
 
     private final MemberRepository memberRepository;
@@ -27,14 +27,11 @@ public class MemberCommandServiceImpl implements MemberCommandService{
     private final FoodCategoryRepository foodCategoryRepository;
 
     @Override
-    @Transactional
     public Member joinMember(MemberRequestDTO.JoinDto request) {
 
         Member newMember = MemberConverter.toMember(request);
         List<FoodCategory> foodCategoryList = request.getFoodLikesList().stream()
-                .map(category -> {
-                    return foodCategoryRepository.findById(category).orElseThrow(() -> new FoodCategoryHandler(ErrorStatus.FOOD_CATEGORY_NOT_FOUND));
-                }).collect(Collectors.toList());
+                .map(category -> foodCategoryRepository.findById(category).orElseThrow(() -> new FoodCategoryHandler(ErrorStatus.FOOD_CATEGORY_NOT_FOUND))).collect(Collectors.toList());
 
         List<FoodLikes> foodLikesList = FoodLikesConverter.toFoodLikesList(foodCategoryList);
 
