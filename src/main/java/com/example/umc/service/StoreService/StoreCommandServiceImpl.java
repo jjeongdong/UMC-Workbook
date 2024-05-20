@@ -70,10 +70,6 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         Member member = memberRepository.findById(memberId).get();
         Mission mission = missionRepository.findById(missionId).get();
 
-        if (memberMissionRepository.existsByMemberAndMission(member, mission)) {
-            throw new MissionHandler(ErrorStatus.MISSION_ALREADY_IN_PROGRESS);
-        }
-
         MemberMission memberMission = MemberMission.builder()
                 .member(member)
                 .mission(mission)

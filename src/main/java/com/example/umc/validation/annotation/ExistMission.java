@@ -1,6 +1,5 @@
 package com.example.umc.validation.annotation;
 
-import com.example.umc.validation.validator.MemberExistsValidator;
 import com.example.umc.validation.validator.MissionExistValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

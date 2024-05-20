@@ -1,6 +1,5 @@
 package com.example.umc.apiPayload;
 
-import com.example.umc.apiPayload.code.BaseCode;
 import com.example.umc.apiPayload.code.status.SuccessStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

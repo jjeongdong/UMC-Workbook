@@ -13,6 +13,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Page<Review> findAllByStore(Store store, PageRequest pageRequest);
 
-    @Query("SELECT r FROM Review r JOIN FETCH r.member m WHERE m = :member")
-    Page<Review> findAllByMember(@Param("member") Member member, PageRequest pageRequest);
+//    @Query("SELECT r FROM Review r JOIN FETCH r.member m WHERE m = :member")
+    Page<Review> findAllByMember(Member member, PageRequest pageRequest);
 }
