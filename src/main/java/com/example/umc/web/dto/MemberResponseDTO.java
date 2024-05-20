@@ -1,5 +1,6 @@
 package com.example.umc.web.dto;
 
+import com.example.umc.domain.enums.MissionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,5 +67,15 @@ public class MemberResponseDTO {
         Integer reward;
         Integer criteria;
         LocalDate expirationDate;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MissionCompleteResponseDTO {
+        Long missionId;
+        MissionStatus missionStatus;
+        LocalDateTime finishedAt;
     }
 }
