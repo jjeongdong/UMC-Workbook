@@ -34,12 +34,14 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     @Override
     public Page<Review> getReviewList(Long memberId, Integer page) {
         Member member = memberRepository.findById(memberId).get();
-        return reviewRepository.findAllByMember(member, PageRequest.of(page, 10));
+        int pageIndex = page - 1;
+        return reviewRepository.findAllByMember(member, PageRequest.of(pageIndex, 10));
     }
 
     @Override
     public Page<MemberMission> getChallengingMissionList(Long memberId, Integer page) {
         Member member = memberRepository.findById(memberId).get();
-        return memberMissionRepository.findByMemberAndStatus(member, MissionStatus.CHALLENGING, PageRequest.of(page, 10));
+        int pageIndex = page - 1;
+        return memberMissionRepository.findByMemberAndStatus(member, MissionStatus.CHALLENGING, PageRequest.of(pageIndex, 10));
     }
 }

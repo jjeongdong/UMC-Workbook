@@ -38,6 +38,9 @@ public enum ErrorStatus implements BaseErrorCode {
     // 게시글 관련 에러
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),
 
+    // 페이지 관련 에러
+    INVALID_PAGE_VALUE(HttpStatus.BAD_REQUEST, "PAGE4001", "페이지 값은 1 이상이어야 합니다."),
+
     // TEST
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "이거는 테스트");
 

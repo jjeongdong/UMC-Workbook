@@ -30,6 +30,7 @@ public class MissionQueryServiceImpl implements MissionQueryService {
     public Page<Mission> getMissionList(Long storeId, Integer page) {
 
         Store store = storeRepository.findById(storeId).get();
-        return missionRepository.findAllByStore(store, PageRequest.of(page, 10));
+        int pageIndex = page - 1;
+        return missionRepository.findAllByStore(store, PageRequest.of(pageIndex, 10));
     }
 }

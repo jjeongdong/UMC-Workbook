@@ -8,6 +8,7 @@ import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.service.MemberMission.MemberMissionCommandService;
 import com.example.umc.service.MemberService.MemberCommandService;
 import com.example.umc.service.MemberService.MemberQueryService;
+import com.example.umc.validation.annotation.CheckPage;
 import com.example.umc.validation.annotation.ExistMember;
 import com.example.umc.validation.annotation.ExistMission;
 import com.example.umc.web.dto.MemberRequestDTO;
@@ -39,6 +40,13 @@ public class MemberRestController {
 
     // 회원가입
     @PostMapping("/sign-up")
+    @Operation(summary = "회원가입 API",description = "회원가입을 하는 API이며, 회원 정보를 주세요")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!",content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "acess 토큰 만료",content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "acess 토큰 모양이 이상함",content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    })
     public ApiResponse<MemberResponseDTO.JoinResultDTO> join(@RequestBody @Valid MemberRequestDTO.JoinDto request){
         Member member = memberCommandService.joinMember(request);
         return ApiResponse.onSuccess(MemberConverter.toJoinResultDTO(member));
@@ -55,10 +63,10 @@ public class MemberRestController {
     })
     @Parameters({
             @Parameter(name = "memberId", description = "멤버의 아이디, path variable 입니다!"),
-            @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다.")
+            @Parameter(name = "page", description = "페이지 번호, 1번이 1 페이지 입니다.")
     })
     public ApiResponse<MemberResponseDTO.ReviewPreViewListDTO> getReviewListByMember(@ExistMember @PathVariable(name = "memberId") Long memberId,
-                                                                                     @RequestParam(name = "page") Integer page){
+                                                                                     @CheckPage @RequestParam(name = "page") Integer page){
 
         Page<Review> reviewList = memberQueryService.getReviewList(memberId, page);
         return ApiResponse.onSuccess(MemberConverter.toReviewPreViewListDTO(reviewList));
@@ -75,10 +83,10 @@ public class MemberRestController {
     })
     @Parameters({
             @Parameter(name = "memberId", description = "멤버의 아이디, path variable 입니다!"),
-            @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다.")
+            @Parameter(name = "page", description = "페이지 번호, 1번이 1 페이지 입니다.")
     })
     public ApiResponse<MemberResponseDTO.ChallengingMissionPreViewListDTO> getChallengingMissionList(@ExistMember @PathVariable(name = "memberId") Long memberId,
-                                                                                                     @RequestParam(name = "page") Integer page){
+                                                                                                     @CheckPage @RequestParam(name = "page") Integer page){
 
         Page<MemberMission> challengingMissionList = memberQueryService.getChallengingMissionList(memberId, page);
         return ApiResponse.onSuccess(MemberConverter.toChallengingMissionPreViewListDTO(challengingMissionList));

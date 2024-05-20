@@ -9,10 +9,7 @@ import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.service.MissionService.MissionQueryService;
 import com.example.umc.service.StoreService.StoreCommandService;
 import com.example.umc.service.StoreService.StoreQueryService;
-import com.example.umc.validation.annotation.ExistMember;
-import com.example.umc.validation.annotation.ExistMission;
-import com.example.umc.validation.annotation.ExistRegion;
-import com.example.umc.validation.annotation.ExistStore;
+import com.example.umc.validation.annotation.*;
 import com.example.umc.web.dto.StoreRequestDTO;
 import com.example.umc.web.dto.StoreResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,29 +36,77 @@ public class StoreRestController {
 
     private final MissionQueryService missionQueryService;
 
+    // 특정 지역에 가게 추가하기 API
     @PostMapping("/{regionId}")
+    @Operation(summary = "특정 지역에 가게 추가하기 API", description = "특정 지역에 가게를 추가하는 API이며, 가게 정보와 지역 번호를 주세요.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "acess 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "acess 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    })
+    @Parameters({
+            @Parameter(name = "regionId", description = "지역의 아이디, path variable 입니다!")
+    })
     public ApiResponse<StoreResponseDTO.StoreCreateResponseDTO> createStore(@RequestBody @Valid StoreRequestDTO.StoreCreateRequestDTO request,
                                                                             @ExistRegion @PathVariable(name = "regionId") Long regionId) {
         Store store = storeCommandService.createStore(regionId, request);
         return ApiResponse.onSuccess(StoreConverter.toStoreCreateResponseDTO(store));
     }
 
+    // 가게에 리뷰 추가 API
     @PostMapping("/{storeId}/reviews")
+    @Operation(summary = "가게에 리뷰 추가 API", description = "가게에 리뷰를 추가하는 API이며, 리뷰 정보와 가게 번호, 멤버 번호를 주세요.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "acess 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "acess 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    })
+    @Parameters({
+            @Parameter(name = "storeId", description = "가게의 아이디, path variable 입니다!"),
+            @Parameter(name = "memberId", description = "멤버의 아이디, request param 입니다!")
+    })
     public ApiResponse<StoreResponseDTO.ReviewResponseDTO> createReview(@RequestBody @Valid StoreRequestDTO.ReviewRequestDTO request,
                                                                         @ExistStore @PathVariable(name = "storeId") Long storeId,
                                                                         @ExistMember @RequestParam(name = "memberId") Long memberId) {
+
         Review review = storeCommandService.createReview(memberId, storeId, request);
         return ApiResponse.onSuccess(StoreConverter.toReviewResponseDTO(review));
     }
 
+    // 가게에 미션 추가하기 API
     @PostMapping("/{storeId}/missions")
+    @Operation(summary = "가게에 미션 추가하기 API", description = "가게에 미션을 추가하는 API이며, 미션 정보와 가게 번호를 주세요.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "acess 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "acess 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    })
+    @Parameters({
+            @Parameter(name = "storeId", description = "가게의 아이디, path variable 입니다!"),
+    })
     public ApiResponse<StoreResponseDTO.MissionResponseDTO> createReview(@RequestBody @Valid StoreRequestDTO.MissionRequestDTO request,
                                                                          @ExistStore @PathVariable(name = "storeId") Long storeId) {
+
         Mission mission = storeCommandService.createMission(storeId, request);
         return ApiResponse.onSuccess(StoreConverter.toMissionResponseDTO(mission));
     }
 
+    // 가게의 미션을 도전 중인 미션에 추가(미션 도전하기) API
     @PostMapping("/missions/{missionId}/challenge")
+    @Operation(summary = "가게의 미션을 도전 중인 미션에 추가(미션 도전하기) API", description = "가게의 미션을 도전 중인 미션에 추가하는 API이며, 미션 번호, 멤버 번호를 주세요")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "acess 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "acess 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    })
+    @Parameters({
+            @Parameter(name = "missionId", description = "미션의 아이디, path variable 입니다!"),
+            @Parameter(name = "memberId", description = "멤버의 아이디, request param 입니다!")
+    })
     public ApiResponse<StoreResponseDTO.MemberMissionResponseDTO> createReview(@ExistMission @PathVariable(name = "missionId") Long missionId,
                                                                                @ExistMember @RequestParam(name = "memberId") Long memberId) {
 
@@ -80,10 +125,10 @@ public class StoreRestController {
     })
     @Parameters({
             @Parameter(name = "storeId", description = "가게의 아이디, path variable 입니다!"),
-            @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다.")
+            @Parameter(name = "page", description = "페이지 번호, 1번이 1 페이지 입니다.")
     })
     public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewListByStore(@ExistStore @PathVariable(name = "storeId") Long storeId,
-                                                                                   @RequestParam(name = "page") Integer page) {
+                                                                                   @CheckPage @RequestParam(name = "page") Integer page) {
 
         Page<Review> reviewList = storeQueryService.getReviewList(storeId, page);
         return ApiResponse.onSuccess(StoreConverter.toReviewPreViewListDTO(reviewList));
@@ -100,10 +145,10 @@ public class StoreRestController {
     })
     @Parameters({
             @Parameter(name = "storeId", description = "가게의 아이디, path variable 입니다!"),
-            @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다.")
+            @Parameter(name = "page", description = "페이지 번호, 1번이 1 페이지 입니다.")
     })
     public ApiResponse<StoreResponseDTO.MissionPreViewListDTO> getMissionList(@ExistStore @PathVariable(name = "storeId") Long storeId,
-                                                                              @RequestParam(name = "page", defaultValue = "0") Integer page ) {
+                                                                              @CheckPage @RequestParam(name = "page") Integer page) {
 
 
         Page<Mission> missionList = missionQueryService.getMissionList(storeId, page);
