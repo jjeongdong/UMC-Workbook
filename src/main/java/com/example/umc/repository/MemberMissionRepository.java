@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface MemberMissionRepository extends JpaRepository<MemberMission, Long> {
 
     boolean existsByMemberAndMission(Member member, Mission mission);
@@ -18,4 +20,6 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
     @EntityGraph(attributePaths = {"member", "mission.store"})
     @Query("SELECT mm FROM MemberMission mm WHERE mm.member = :member AND mm.status = :status")
     Page<MemberMission> findByMemberAndStatus(@Param("member") Member member, @Param("status") MissionStatus status, PageRequest pageRequest);
+
+    Optional<MemberMission> findByMemberIdAndMissionId(Long memberId, Long missionId);
 }

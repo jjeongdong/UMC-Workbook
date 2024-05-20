@@ -83,7 +83,7 @@ public class StoreRestController {
             @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다.")
     })
     public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewListByStore(@ExistStore @PathVariable(name = "storeId") Long storeId,
-                                                                            @RequestParam(name = "page") Integer page) {
+                                                                                   @RequestParam(name = "page") Integer page) {
 
         Page<Review> reviewList = storeQueryService.getReviewList(storeId, page);
         return ApiResponse.onSuccess(StoreConverter.toReviewPreViewListDTO(reviewList));

@@ -94,4 +94,12 @@ public class MemberConverter {
                 .challengingMissionList(reviewPreViewDTOList)
                 .build();
     }
+
+    public static MemberResponseDTO.MissionCompleteResponseDTO toMissionCompleteResponseDTO(MemberMission memberMission){
+        return MemberResponseDTO.MissionCompleteResponseDTO.builder()
+                .missionId(memberMission.getMission().getId())
+                .missionStatus(memberMission.getStatus())
+                .finishedAt(memberMission.getFinishedAt())
+                .build();
+    }
 }
