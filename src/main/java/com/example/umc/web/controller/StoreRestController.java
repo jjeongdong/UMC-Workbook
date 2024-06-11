@@ -23,6 +23,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @Validated
@@ -55,28 +59,31 @@ public class StoreRestController {
     }
 
     // 가게에 리뷰 추가 API
-    @PostMapping("/{storeId}/reviews")
+    @PostMapping(value = "/{storeId}/reviews")
     @Operation(summary = "가게에 리뷰 추가 API", description = "가게에 리뷰를 추가하는 API이며, 리뷰 정보와 가게 번호, 멤버 번호를 주세요.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "acess 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "acess 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "access 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "access 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
     })
     @Parameters({
             @Parameter(name = "storeId", description = "가게의 아이디, path variable 입니다!"),
             @Parameter(name = "memberId", description = "멤버의 아이디, request param 입니다!")
     })
-    public ApiResponse<StoreResponseDTO.ReviewResponseDTO> createReview(@RequestBody @Valid StoreRequestDTO.ReviewRequestDTO request,
-                                                                        @ExistStore @PathVariable(name = "storeId") Long storeId,
-                                                                        @ExistMember @RequestParam(name = "memberId") Long memberId) {
+    public ApiResponse<StoreResponseDTO.ReviewResponseDTO> createReview(
+            @RequestPart("request") @Valid StoreRequestDTO.ReviewRequestDTO request,
+            @RequestPart("images") List<MultipartFile> multipartFiles,
+            @ExistStore @PathVariable(name = "storeId") Long storeId,
+            @ExistMember @RequestParam(name = "memberId") Long memberId) throws IOException {
 
-        Review review = storeCommandService.createReview(memberId, storeId, request);
+        Review review = storeCommandService.createReview(memberId, storeId, request, multipartFiles);
         return ApiResponse.onSuccess(StoreConverter.toReviewResponseDTO(review));
     }
 
+
     // 가게에 미션 추가하기 API
-    @PostMapping("/{storeId}/missions")
+    @PostMapping(value = "/{storeId}/missions")
     @Operation(summary = "가게에 미션 추가하기 API", description = "가게에 미션을 추가하는 API이며, 미션 정보와 가게 번호를 주세요.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
