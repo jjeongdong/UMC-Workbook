@@ -1,19 +1,23 @@
 package com.example.umc.service.StoreService;
 
 import com.example.umc.apiPayload.code.status.ErrorStatus;
-import com.example.umc.apiPayload.exception.handler.MissionHandler;
-import com.example.umc.apiPayload.exception.handler.TempHandler;
+import com.example.umc.apiPayload.exception.handler.ReviewHandler;
+import com.example.umc.aws.s3.AmazonS3Manager;
+import com.example.umc.config.AmazonConfig;
+import com.example.umc.converter.ReviewConverter;
 import com.example.umc.converter.StoreConverter;
-import com.example.umc.domain.Member;
-import com.example.umc.domain.Mission;
-import com.example.umc.domain.Review;
-import com.example.umc.domain.Store;
+import com.example.umc.domain.*;
 import com.example.umc.domain.mapping.MemberMission;
 import com.example.umc.repository.*;
 import com.example.umc.web.dto.StoreRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -32,6 +36,14 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
     private final RegionRepository regionRepository;
 
+    private final AmazonS3Manager s3Manager;
+
+    private final UuidRepository uuidRepository;
+
+    private final ReviewImgRepository reviewImgRepository;
+
+    private final AmazonConfig amazonConfig;
+
 
     @Override
     public Store createStore(Long regionId, StoreRequestDTO.StoreCreateRequestDTO request) {
@@ -44,14 +56,31 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     }
 
     @Override
-    public Review createReview(Long memberId, Long storeId, StoreRequestDTO.ReviewRequestDTO request) {
+    public Review createReview(Long memberId, Long storeId, StoreRequestDTO.ReviewRequestDTO request, List<MultipartFile> multipartFiles) throws IOException {
+
+        Member member = memberRepository.findById(memberId).get();
+        Store store = storeRepository.findById(storeId).get();
+
+        if (reviewRepository.existsByMemberAndStore(member, store)) {
+            throw new ReviewHandler(ErrorStatus.ALREADY_EXISTS_REVIEW);
+        }
 
         Review review = StoreConverter.toReview(request);
 
-        review.setMember(memberRepository.findById(memberId).get());
-        review.setStore(storeRepository.findById(storeId).get());
+        String uuid = UUID.randomUUID().toString();
+        Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
 
-        return reviewRepository.save(review);
+        List<String> pictureUrls = s3Manager.upload(multipartFiles, amazonConfig.getReviewPath(), savedUuid);
+
+        review.setMember(member);
+        review.setStore(store);
+
+        Review savedReview = reviewRepository.save(review);
+
+        List<ReviewImg> reviewImgList = ReviewConverter.toReviewImgList(pictureUrls, savedReview);
+        reviewImgRepository.saveAll(reviewImgList);
+
+        return savedReview;
     }
 
     @Override

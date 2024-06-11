@@ -22,3 +22,17 @@ spring:
 logging:
   level:
     org.hibernate.type.descriptor.sql: trace # 파라미터 값 출력
+
+cloud:
+  aws:
+    s3:
+      bucket: myumcbucket
+      path:
+        review: reviews
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}

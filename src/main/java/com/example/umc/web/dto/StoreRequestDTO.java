@@ -2,6 +2,7 @@ package com.example.umc.web.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public class StoreRequestDTO {
